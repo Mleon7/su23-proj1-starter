@@ -132,6 +132,13 @@ void free_state(game_state_t* state) {
 /* Task 3 */
 void print_board(game_state_t* state, FILE* fp) {
   // TODO: Implement this function.
+  if (state == NULL || fp == NULL) {
+      return;
+  }
+
+  for (unsigned int i = 0; i < state->num_rows; ++i) {
+      fprintf(fp, "%s\n", state->board[i]);
+  }
   return;
 }
 
