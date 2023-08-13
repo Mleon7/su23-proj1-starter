@@ -24,7 +24,85 @@ static void update_head(game_state_t* state, unsigned int snum);
 /* Task 1 */
 game_state_t* create_default_state() {
   // TODO: Implement this function.
-  return NULL;
+  // Create a new game_state_t struct and allocate memory for it
+  // Allocate memory for the game_state_t struct
+  game_state_t* state = (game_state_t*)malloc(sizeof(game_state_t));
+  if (state == NULL) {
+      fprintf(stderr, "Memory allocation failed for game_state_t.\n");
+      return NULL;
+  }
+
+  // Initialize the game_state_t members
+  state->num_rows = 18;
+  state->num_snakes = 1;
+
+  // Allocate memory for the 'board' array of strings
+  state->board = (char**)malloc(state->num_rows * sizeof(char*));
+  if (state->board == NULL) {
+      fprintf(stderr, "Memory allocation failed for board array.\n");
+      free(state);
+      return NULL;
+  }
+
+  // Allocate memory for each row and initialize the 'board' with the default layout
+  for (unsigned int i = 0; i < state->num_rows; ++i) {
+      state->board[i] = (char*)malloc(21 * sizeof(char)); // 20 characters + '\0'
+      if (state->board[i] == NULL) {
+          fprintf(stderr, "Memory allocation failed for board row %d.\n", i);
+          for (unsigned int j = 0; j < i; ++j) {
+              free(state->board[j]);
+          }
+          free(state->board);
+          free(state);
+          return NULL;
+      }
+  }
+
+  // Initialize the board with the default layout
+  const char* default_board[] = {
+      "####################",
+      "#                  #",
+      "# d>D    *         #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "#                  #",
+      "####################"
+  };
+
+  for (unsigned int i = 0; i < state->num_rows; ++i) {
+      strcpy(state->board[i], default_board[i]);
+  }
+
+  // Initialize the snake
+  state->snakes = (snake_t*)malloc(sizeof(snake_t));
+  if (state->snakes == NULL) {
+      fprintf(stderr, "Memory allocation failed for snake.\n");
+      for (unsigned int i = 0; i < state->num_rows; ++i) {
+          free(state->board[i]);
+      }
+      free(state->board);
+      free(state);
+      return NULL;
+  }
+
+  state->snakes[0].tail_row = 2;
+  state->snakes[0].tail_col = 2;
+  state->snakes[0].head_row = 2;
+  state->snakes[0].head_col = 4;
+  state->snakes[0].live = true;
+
+  return state;
 }
 
 /* Task 2 */
