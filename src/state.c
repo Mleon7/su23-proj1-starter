@@ -284,7 +284,17 @@ static unsigned int get_next_col(unsigned int cur_col, char c) {
 */
 static char next_square(game_state_t* state, unsigned int snum) {
   // TODO: Implement this function.
-  return '?';
+  snake_t snake = state->snakes[snum]; // Get the snake by its index
+  unsigned int next_row = get_next_row(snake.head_row, state->board[snake.head_row][snake.head_col]);
+  unsigned int next_col = get_next_col(snake.head_col, state->board[snake.head_row][snake.head_col]);
+
+  // Check if the next cell is within the bounds of the board
+  if (next_row >= state->num_rows || next_col >= strlen(state->board[next_row])) {
+    return '?'; // Invalid position, return a placeholder character
+  }
+
+  char next_cell = state->board[next_row][next_col];
+  return next_cell;
 }
 
 /*
