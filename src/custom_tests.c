@@ -100,36 +100,115 @@ bool test_is_vowel() {
 
 bool test_is_tail() {
   // TODO: Implement this function.
+  char testcase_1 = 'w';
+  bool output_1 = is_tail(testcase_1);
+  if (!assert_true("output_1", output_1)) {
+    return false;
+  }
+  char testcase_2 = 'd';
+  bool output_2 = is_tail(testcase_2);
+  if (!assert_true("output_2", output_2)) {
+    return false;
+  }
+  char testcase_3 = 'W';
+  bool output_3 = is_tail(testcase_3);
+  if (!assert_false("output_3", output_3)) {
+    return false;
+  }
   return true;
 }
 
 bool test_is_head() {
   // TODO: Implement this function.
+  char testcase_1 = 'W';
+  bool output_1 = is_head(testcase_1);
+  if (!assert_true("output_1", output_1)) {
+    return false;
+  }
+
+  char testcase_2 = 'D';
+  bool output_2 = is_head(testcase_2);
+  if (!assert_true("output_2", output_2)) {
+    return false;
+  }
+
+  char testcase_3 = 'x';
+  bool output_3 = is_head(testcase_3);
+  if (!assert_true("output_3", output_3)) {
+    return false;
+  }
+
+  char testcase_4 = 'd';
+  bool output_4 = is_head(testcase_4);
+  if (!assert_false("output_4", output_4)) {
+    return false;
+  }
+
   return true;
 }
 
 bool test_is_snake() {
   // TODO: Implement this function.
+  char testcase_1 = 'x';
+  bool output_1 = is_snake(testcase_1);
+  if (!assert_true("output_1", output_1)) {
+    return false;
+  }
+
+  char testcase_2 = '*';
+  bool output_2 = is_snake(testcase_2);
+  if (!assert_false("output_2", output_2)){
+    return false;
+  };
+
   return true;
 }
 
 bool test_body_to_tail() {
   // TODO: Implement this function.
+  char output_1 = body_to_tail('^');
+  if (!assert_equals_char("test1", 'w', output_1)) {
+    return false;
+  }
+
+  char output_2 = body_to_tail('*');
+  if (!assert_equals_char("test2", '?', output_2)) {
+    return false;
+  }
+
   return true;
 }
 
 bool test_head_to_body() {
   // TODO: Implement this function.
+  char output_1 = head_to_body('W');
+  if (!assert_equals_char("test1", '^', output_1)) {
+    return false;
+  }
   return true;
 }
 
 bool test_get_next_row() {
   // TODO: Implement this function.
+  unsigned int output_1 = get_next_row(3, 's');
+  if (!assert_equals_unsigned_int("test1", 4, output_1)) {
+    return false;
+  }
+
+  unsigned int output_2 = get_next_row(6, 'W');
+  if (!assert_equals_unsigned_int("test2", 5, output_2)) {
+    return false;
+  }
+
   return true;
 }
 
 bool test_get_next_col() {
   // TODO: Implement this function.
+  unsigned int output_1 = get_next_col(3, '>');
+  if (!assert_equals_unsigned_int("test1", 4, output_1)) {
+    return false;
+  }
   return true;
 }
 
