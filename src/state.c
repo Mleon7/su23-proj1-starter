@@ -377,8 +377,70 @@ void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
 
 /* Task 5 */
 game_state_t* load_board(FILE* fp) {
-  // TODO: Implement this function.
-  return NULL;
+    // Allocate memory for the game_state_t struct
+    game_state_t* state = (game_state_t*)malloc(sizeof(game_state_t));
+    if (state == NULL) {
+        return NULL; // Memory allocation failed
+    }
+
+    // Initialize struct members
+    state->num_rows = 0;
+    state->board = NULL;
+    state->num_snakes = 0;
+    state->snakes = NULL;
+
+    // Read the game board from the stream
+    char line[1024];
+    unsigned int row_index = 0;
+    unsigned int max_cols = 0;
+
+    while (fgets(line, sizeof(line), fp) != NULL) {
+        size_t line_len = strlen(line);
+
+        // Remove the newline character from the line
+        if (line_len > 0 && line[line_len - 1] == '\n') {
+            line[line_len - 1] = '\0';
+            line_len--;
+        }
+
+        // Resize the board array to accommodate a new row
+        state->board = (char**)realloc(state->board, (row_index + 1) * sizeof(char*));
+        if (state->board == NULL) {
+            free(state);
+            return NULL; // Memory allocation failed
+        }
+
+        // Allocate memory for the row and copy the line content
+        state->board[row_index] = (char*)malloc(line_len + 1);
+        if (state->board[row_index] == NULL) {
+            // Free previously allocated memory
+            for (unsigned int i = 0; i < row_index; ++i) {
+                free(state->board[i]);
+            }
+            free(state->board);
+            free(state);
+            return NULL; // Memory allocation failed
+        }
+
+        strcpy(state->board[row_index], line);
+
+        // Update the maximum column count
+        if (line_len > max_cols) {
+            max_cols = line_len;
+        }
+
+        ++row_index;
+    }
+
+    // Set the number of rows and columns in the game_state_t struct
+    state->num_rows = row_index;
+
+    // Trim excess memory from each row to match the actual column count
+    for (unsigned int i = 0; i < state->num_rows; ++i) {
+        state->board[i] = (char*)realloc(state->board[i], max_cols + 1);
+    }
+
+    return state;
 }
 
 /*
