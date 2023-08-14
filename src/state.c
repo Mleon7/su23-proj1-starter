@@ -310,6 +310,23 @@ static char next_square(game_state_t* state, unsigned int snum) {
 */
 static void update_head(game_state_t* state, unsigned int snum) {
   // TODO: Implement this function.
+  snake_t snake = state->snakes[snum]; // Get the snake by its index
+  char c = state->board[snake.head_row][snake.head_col];
+  unsigned int next_row = get_next_row(snake.head_row, c);
+  unsigned int next_col = get_next_col(snake.head_col, c);
+
+  // Check if the next cell is within the bounds of the board
+  // if (next_row >= state->num_rows || next_col >= strlen(state->board[next_row])) {
+  //   return '?'; // Invalid position, return a placeholder character
+  // }
+
+  char new_body = head_to_body(c);
+  state->board[snake.head_row][snake.head_col] = new_body;
+  state->board[next_row][next_col] = c;
+
+  state->snakes[snum].head_col = next_col;
+  state->snakes[snum].head_row = next_row;
+
   return;
 }
 
