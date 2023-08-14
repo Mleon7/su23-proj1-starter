@@ -396,7 +396,7 @@ game_state_t* load_board(FILE* fp) {
     unsigned int max_cols = 0;
 
     while (fgets(line, sizeof(line), fp) != NULL) {
-        size_t line_len = strlen(line);
+        unsigned int line_len = strlen(line);
 
         // Remove the newline character from the line
         if (line_len > 0 && line[line_len - 1] == '\n') {
@@ -468,6 +468,41 @@ static void find_head(game_state_t* state, unsigned int snum) {
 
 /* Task 6.2 */
 game_state_t* initialize_snakes(game_state_t* state) {
-  // TODO: Implement this function.
-  return NULL;
+    unsigned int num_snakes = 0;
+
+    // Count the number of snakes on the board
+    for (unsigned int i = 0; i < state->num_rows; i++) {
+        for (unsigned int j = 0; j < strlen(state->board[i]); j++) {
+            if (is_tail(state->board[i][j])) {
+                num_snakes++;
+            }
+        }
+    }
+
+    // Allocate memory for the snakes array
+    state->snakes = (snake_t*)malloc(num_snakes * sizeof(snake_t));
+    if (state->snakes == NULL) {
+        // Handle memory allocation failure
+        return NULL;
+    }
+
+    state->num_snakes = num_snakes;
+
+    // Initialize each snake's tail position and find its head
+    unsigned int snake_count = 0;
+    for (unsigned int i = 0; i < state->num_rows; i++) {
+        for (unsigned int j = 0; j < strlen(state->board[i]); j++) {
+            if (is_tail(state->board[i][j])) {
+                state->snakes[snake_count].tail_row = i;
+                state->snakes[snake_count].tail_col = j;
+                state->snakes[snake_count].live = true;
+
+                find_head(state, snake_count); // Fill in the head position
+
+                snake_count++;
+            }
+        }
+    }
+
+    return state;
 }
