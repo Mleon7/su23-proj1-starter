@@ -377,6 +377,7 @@ void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
 
 /* Task 5 */
 game_state_t* load_board(FILE* fp) {
+    // by chatgpt
     // Allocate memory for the game_state_t struct
     game_state_t* state = (game_state_t*)malloc(sizeof(game_state_t));
     if (state == NULL) {
@@ -452,8 +453,17 @@ game_state_t* load_board(FILE* fp) {
   fill in the head row and col in the struct.
 */
 static void find_head(game_state_t* state, unsigned int snum) {
-  // TODO: Implement this function.
-  return;
+    snake_t* snake = &(state->snakes[snum]);
+    unsigned int row = snake->tail_row;
+    unsigned int col = snake->tail_col;
+
+    while (!is_head(state->board[row][col])) {
+        row = get_next_row(row, state->board[row][col]);
+        col = get_next_col(col, state->board[row][col]);
+    }
+
+    snake->head_row = row;
+    snake->head_col = col;
 }
 
 /* Task 6.2 */
