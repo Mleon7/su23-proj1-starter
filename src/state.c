@@ -342,6 +342,23 @@ static void update_head(game_state_t* state, unsigned int snum) {
 */
 static void update_tail(game_state_t* state, unsigned int snum) {
   // TODO: Implement this function.
+  snake_t snake = state->snakes[snum]; // Get the snake by its index
+  char old_tail = state->board[snake.tail_row][snake.tail_col];
+  unsigned int next_row = get_next_row(snake.tail_row, old_tail);
+  unsigned int next_col = get_next_col(snake.tail_col, old_tail);
+  char c = state->board[next_row][next_col];
+
+  // Check if the next cell is within the bounds of the board
+  // if (next_row >= state->num_rows || next_col >= strlen(state->board[next_row])) {
+  //   return '?'; // Invalid position, return a placeholder character
+  // }
+
+  char new_tail = body_to_tail(c);
+  state->board[snake.tail_row][snake.tail_col] = ' ';
+  state->board[next_row][next_col] = new_tail;
+
+  state->snakes[snum].tail_col = next_col;
+  state->snakes[snum].tail_row = next_row;
   return;
 }
 
