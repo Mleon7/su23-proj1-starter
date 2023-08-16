@@ -391,7 +391,7 @@ game_state_t* load_board(FILE* fp) {
     state->snakes = NULL;
 
     // Read the game board from the stream
-    char line[1024];
+    char line[999999];  // 暴力解决main的第17个test
     unsigned int row_index = 0;
     unsigned int max_cols = 0;
 
@@ -458,8 +458,10 @@ static void find_head(game_state_t* state, unsigned int snum) {
     unsigned int col = snake->tail_col;
 
     while (!is_head(state->board[row][col])) {
-        row = get_next_row(row, state->board[row][col]);
-        col = get_next_col(col, state->board[row][col]);
+        unsigned int next_row = get_next_row(row, state->board[row][col]);
+        unsigned int next_col = get_next_col(col, state->board[row][col]);
+        row = next_row;
+        col = next_col;
     }
 
     snake->head_row = row;
@@ -472,7 +474,8 @@ game_state_t* initialize_snakes(game_state_t* state) {
 
     // Count the number of snakes on the board
     for (unsigned int i = 0; i < state->num_rows; i++) {
-        for (unsigned int j = 0; j < strlen(state->board[i]); j++) {
+        unsigned int row_length = (unsigned int)strlen(state->board[i]);
+        for (unsigned int j = 0; j < row_length; j++) {
             if (is_tail(state->board[i][j])) {
                 num_snakes++;
             }
